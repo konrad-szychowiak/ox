@@ -1,8 +1,4 @@
-<center>
-:x::o:
-</center>
-
-# xo
+# XO
 
 `xo` is a simple, bash-driven, console :x: cross and :o: circle :video_game: game.
 
