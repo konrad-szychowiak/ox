@@ -12,7 +12,7 @@
 
 Enable executing the file.
 
-```sh
+```bash
 chmod u+x xo
 ```
 

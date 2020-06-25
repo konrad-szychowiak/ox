@@ -27,7 +27,7 @@ function print_help {
 }
 
 function winner {
-  printf "$LOG[%6s]$NULL Gra zakończona... $1 wygrywa grę.$NULL\n" game
+  [[ $quite ]] && printf "$LOG[%6s]$NULL Gra zakończona... $1 wygrywa grę.$NULL\n" game
 }
 
 function check_if_solved {
@@ -100,11 +100,11 @@ function set_player_symbol {
 function put_user_symbol {
   local where=-1
   until [[ 0 -le $where ]] && [[ 9 -ge $where ]] && [[ ${XOBOARD[$where]} == $where ]]; do
-    printf "Zagraj $symbolX na polę: "
+    [[ $quite ]] && printf "Zagraj $symbolX na polę: "
     read where
   done
 
-  printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" player
+  [[ $quite ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" player
   XOBOARD[$where]=$symbolX
 }
 
@@ -113,7 +113,7 @@ function put_enemy_symbol {
   until [[ ${XOBOARD[$where]} == $where ]]; do
     where=$(( $RANDOM % 9 ))
   done
-  printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" cpu
+  [[ $quite ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" cpu
   XOBOARD[$where]=$symbolO
 
   check_if_solved
@@ -156,16 +156,21 @@ for arg in "$@"; do
   case "$arg" in
     "--help")
       set -- "$@" "-h" ;;
+    "--quiet")
+      set -- "$@" "-q" ;;
     *)
       set -- "$@" "$arg"
   esac
 done
 
-while getopts ":hucxo :X: :O:" opt; do
+while getopts ":hucxoq :X: :O:" opt; do
   case ${opt} in
     h )
       print_help
       exit 0
+      ;;
+    q )
+      quiet=0
       ;;
     u )
       firstPlayer=user
