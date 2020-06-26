@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
+
 B="\e[1m"
 RED="\e[31m"
 BLUE="\e[34m"
 NULL="\e[0m"
 LOG="" #"\e[35m"
 
-
 # preset
+XOBOARD=(0 1 2 3 4 5 6 7 8)
+
 symbolX=$RED"X"$NULL
 symbolO=$BLUE"O"$NULL
 quiet=false
-# solved=false
 
 function print_help {
   echo -e "Składnia: ${0##*/} [OPCJA [ARGUMENT] …]"
@@ -95,21 +96,6 @@ function check_if_solved {
   return 1
 }
 
-function set_player_symbol {
-  case $symbolPlayer in
-    X )
-      symbolPlayer=$symbolX
-      ;;
-    Y )
-      symbolPlayer=$symbolY
-      ;;
-    * )
-      printf "Please redefine player's symbol -? "
-      read symbolPlayer
-      ;;
-  esac
-}
-
 function put_user_symbol {
   local where=-1
   until [[ 0 -le $where ]] 2>/dev/null && [[ 9 -ge $where ]] 2>/dev/null && [[ ${XOBOARD[$where]} == $where ]] 2>/dev/null; do
@@ -166,9 +152,9 @@ function print_board {
   # return 8
 }
 
-# MAIN
-XOBOARD=(0 1 2 3 4 5 6 7 8)
 
+
+# CONFIG
 for arg in "$@"; do
   shift
   case "$arg" in
@@ -225,6 +211,9 @@ while getopts ":hucxoq :X: :O:" opt; do
   esac
 done
 
+
+
+# MAIN
 # set_player_symbol
 if [[ $firstPlayer = cpu ]]; then
   put_enemy_symbol
