@@ -61,7 +61,6 @@ Komputer gra losowo, więc gracz ma większe szanse na wygraną.
 Opcje z argumentami:
 -X ZNAK		zastępuje domyslny znak krzyżyka (X) przez ZNAK
 -O ZNAK		zastępuje domyslny znak kółka (O) przez ZNAK
-
 ```
 
 ## Contributing

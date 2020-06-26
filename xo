@@ -9,6 +9,7 @@ LOG="" #"\e[35m"
 # preset
 symbolX=$RED"X"$NULL
 symbolO=$BLUE"O"$NULL
+quiet=false
 
 function print_help {
   echo -e "Składnia: ${0##*/} [OPCJA [ARGUMENT] …]"
@@ -27,10 +28,12 @@ function print_help {
 }
 
 function winner {
-  [[ $quite ]] && printf "$LOG[%6s]$NULL Gra zakończona... $1 wygrywa grę.$NULL\n" game
+  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Gra zakończona... $1 wygrywa grę.$NULL\n" game
 }
 
 function check_if_solved {
+  # for 
+
   if [ ${XOBOARD[0]} = ${XOBOARD[1]} -a ${XOBOARD[1]} = ${XOBOARD[2]} ]
   then
     winner ${XOBOARD[0]}
@@ -90,21 +93,21 @@ function set_player_symbol {
     Y )
       symbolPlayer=$symbolY
       ;;
-#     * )
-#       printf "Please redefine player's symbol -? "
-#       read symbolPlayer
-#       ;;
+    * )
+     printf "Please redefine player's symbol -? "
+     read symbolPlayer
+      ;;
   esac
 }
 
 function put_user_symbol {
   local where=-1
   until [[ 0 -le $where ]] && [[ 9 -ge $where ]] && [[ ${XOBOARD[$where]} == $where ]]; do
-    [[ $quite ]] && printf "Zagraj $symbolX na polę: "
+    [[ $quite != true ]] && printf "Zagraj $symbolX na polę: "
     read where
   done
 
-  [[ $quite ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" player
+  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" player
   XOBOARD[$where]=$symbolX
 }
 
@@ -113,7 +116,7 @@ function put_enemy_symbol {
   until [[ ${XOBOARD[$where]} == $where ]]; do
     where=$(( $RANDOM % 9 ))
   done
-  [[ $quite ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" cpu
+  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" cpu
   XOBOARD[$where]=$symbolO
 
   check_if_solved
@@ -170,7 +173,7 @@ while getopts ":hucxoq :X: :O:" opt; do
       exit 0
       ;;
     q )
-      quiet=0
+      quiet=true
       ;;
     u )
       firstPlayer=user
@@ -187,11 +190,13 @@ while getopts ":hucxoq :X: :O:" opt; do
       # echo -e $BLUE"Symbol for [O] has been overwritten by the user. Now using [$symbolX]."$NULL
       ;;
     x )
-      symbolPlayer=X
+      symbolX=$RED"X"$NULL
+      symbolO=$BLUE"O"$NULL
       # echo -e $BLUE"User have chosen to play [$symbolX]"$NULL
       ;;
     o )
-      symbolPlayer=O
+      symbolX=$RED"O"$NULL
+      symbolO=$BLUE"X"$NULL
       # echo -e $BLUE"Symbol for [O] has been overwritten by the user. Now using [$symbolX]."$NULL
       ;;
     \? )
@@ -205,7 +210,7 @@ while getopts ":hucxoq :X: :O:" opt; do
   esac
 done
 
-set_player_symbol
+# set_player_symbol
 solved=false
 
 if [[ $firstPlayer = cpu ]]; then
