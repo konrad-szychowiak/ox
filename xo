@@ -10,6 +10,7 @@ LOG="" #"\e[35m"
 symbolX=$RED"X"$NULL
 symbolO=$BLUE"O"$NULL
 quiet=false
+# solved=false
 
 function print_help {
   echo -e "Składnia: ${0##*/} [OPCJA [ARGUMENT] …]"
@@ -28,11 +29,14 @@ function print_help {
 }
 
 function winner {
-  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Gra zakończona... $1 wygrywa grę.$NULL\n" game
+  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Gra zakończona... $1 wygrywa grę.\n" game
 }
 
 function check_if_solved {
-  # for 
+  local crowded=0
+
+  for i in ${!XOBOARD[*]}; do [[ $i = ${XOBOARD[$i]} ]] && crowded=$(( crowded + 1 )); done
+
 
   if [ ${XOBOARD[0]} = ${XOBOARD[1]} -a ${XOBOARD[1]} = ${XOBOARD[2]} ]
   then
@@ -82,6 +86,12 @@ function check_if_solved {
     return 0
   fi
 
+  if [[ $crowded == 0 ]]
+  then
+    [[ $quite != true ]] && printf "$LOG[%6s]$NULL Gra zakończona... Remis.\n" game
+    return 0
+  fi
+
   return 1
 }
 
@@ -94,15 +104,15 @@ function set_player_symbol {
       symbolPlayer=$symbolY
       ;;
     * )
-     printf "Please redefine player's symbol -? "
-     read symbolPlayer
+      printf "Please redefine player's symbol -? "
+      read symbolPlayer
       ;;
   esac
 }
 
 function put_user_symbol {
   local where=-1
-  until [[ 0 -le $where ]] && [[ 9 -ge $where ]] && [[ ${XOBOARD[$where]} == $where ]]; do
+  until [[ 0 -le $where ]] 2>/dev/null && [[ 9 -ge $where ]] 2>/dev/null && [[ ${XOBOARD[$where]} == $where ]] 2>/dev/null; do
     [[ $quite != true ]] && printf "Zagraj $symbolX na polę: "
     read where
   done
@@ -116,7 +126,7 @@ function put_enemy_symbol {
   until [[ ${XOBOARD[$where]} == $where ]]; do
     where=$(( $RANDOM % 9 ))
   done
-  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" cpu
+  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolO zagrano na $where...\n" cpu
   XOBOARD[$where]=$symbolO
 
   check_if_solved
@@ -142,10 +152,10 @@ function print_board {
   printf "+---+---+---+\n"
   for i in ${!XOBOARD[*]}
   do
-      get_symbol ${XOBOARD[$i]}
-      if (( $i % 3 == 2 )); then
-        printf "|\n+---+---+---+\n"
-      fi
+    get_symbol ${XOBOARD[$i]}
+    if (( $i % 3 == 2 )); then
+      printf "|\n+---+---+---+\n"
+    fi
   done
 
   # return 8
@@ -197,7 +207,7 @@ while getopts ":hucxoq :X: :O:" opt; do
     o )
       symbolX=$RED"O"$NULL
       symbolO=$BLUE"X"$NULL
-      # echo -e $BLUE"Symbol for [O] has been overwritten by the user. Now using [$symbolX]."$NULL
+      # echo -e $BLUE"Symbol for [O] has been overwritten by the user. Now using [$symbolO]."$NULL
       ;;
     \? )
       echo "Invalid Option: -$OPTARG" 1>&2
@@ -211,8 +221,6 @@ while getopts ":hucxoq :X: :O:" opt; do
 done
 
 # set_player_symbol
-solved=false
-
 if [[ $firstPlayer = cpu ]]; then
   put_enemy_symbol
 fi
@@ -227,5 +235,4 @@ until [[ $solved = true ]]; do
   put_enemy_symbol
   print_board
   check_if_solved && break
-
 done
