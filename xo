@@ -145,18 +145,23 @@ function get_symbol {
       ;;
   esac
 
-  printf "| $get "
+  printf "│ $get "
 }
 
 function print_board {
-  printf "+---+---+---+\n"
-  for i in ${!XOBOARD[*]}
-  do
-    get_symbol ${XOBOARD[$i]}
-    if (( $i % 3 == 2 )); then
-      printf "|\n+---+---+---+\n"
-    fi
-  done
+  printf "╭───┬───┬───╮\n"
+  get_symbol ${XOBOARD[0]}
+  get_symbol ${XOBOARD[1]}
+  get_symbol ${XOBOARD[2]}
+  printf "│\n├───┼───┼───┤\n"
+  get_symbol ${XOBOARD[3]}
+  get_symbol ${XOBOARD[4]}
+  get_symbol ${XOBOARD[5]}
+  printf "│\n├───┼───┼───┤\n"
+  get_symbol ${XOBOARD[6]}
+  get_symbol ${XOBOARD[7]}
+  get_symbol ${XOBOARD[8]}
+  printf "│\n╰───┴───┴───╯\n"
 
   # return 8
 }
