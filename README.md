@@ -1,15 +1,15 @@
-# XO
+# ox
 
-`xo` is a simple, bash-driven, console :x: cross and :o: circle :video_game: game.
+`ox` is a simple, bash-driven, console :o: noughts and crosses :x: :video_game: game.
 
-> Currently available only in polish [`PL_pl`].
+> Currently available only in polish [`pl_PL`].
 
 ## Installation
 
 Enable executing the file.
 
 ```bash
-chmod u+x xo
+chmod u+x ox
 ```
 
 ### `PATH`
@@ -30,7 +30,7 @@ If you really want, you can add `xo` to your PATH.
 
    It's likely, that you will find a directory like `/home/$USER/bin` or `/home/$USER/.local/bin`. (`$USER` will be your username in the system.)
 
-3. Now move or link `xo` to one of those PATH directories. I highly suggest something local like mentioned `/home/$USER/bin` or `/home/$USER/.local/bin`.
+3. Now move or link `ox` to one of those PATH directories. I highly suggest something local like mentioned `/home/$USER/bin` or `/home/$USER/.local/bin`.
 
 4. Now you can accesses `xo` from every place.
 
@@ -38,14 +38,14 @@ If you really want, you can add `xo` to your PATH.
 
 ```sh
 # without adding to PATH
-./xo -h
+./ox -h
 
-# with
-xo -h
-which xo # should return the path to the directory you've chosen
+# with PATH
+ox -h
+which ox # should return the path to the directory you've chosen
 ```
 
-### Options
+### Options !!!DEPRECATED
 
 ```
 Składnia: xo [OPCJA [ARGUMENT] …]
