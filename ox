@@ -9,29 +9,7 @@ LOG="" #"\e[35m"
 # preset
 XOBOARD=(0 1 2 3 4 5 6 7 8)
 
-symbolX=$RED"X"$NULL
-symbolO=$BLUE"O"$NULL
-quiet=false
-
-function print_help {
-  echo -e "Składnia: ${0##*/} [OPCJA [ARGUMENT] …]"
-  echo -e "Prosta gra w kółko i krzyżyk z komputerem. \nKomputer gra losowo, więc gracz ma większe szanse na wygraną.\n"
-
-  echo -e "-h, --help\twyświetla tę pomoc i kończy działanie skryptu"
-  echo -e "-q, --quiet\tnie pokazuje logów"
-  echo -e "$B-u$NULL\t\tużytkownik zaczyna grę (DOMYŚLNE)"
-  echo -e "-c\t\tkomputer zaczyna grę"
-  echo -e "$B-x$NULL\t\tgracz gra krzyżykiem (DOMYŚLNE)"
-  echo -e "-o\t\tgracz gra kółkiem"
-
-  echo -e "\nOpcje z argumentami:"
-  echo -e "-X ZNAK\t\tzastępuje domyslny znak krzyżyka (X) przez ZNAK"
-  echo -e "-O ZNAK\t\tzastępuje domyslny znak kółka (O) przez ZNAK"
-}
-
-function winner {
-  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Gra zakończona... $1 wygrywa grę.\n" game
-}
+. locales/en_GB.locale
 
 function check_if_solved {
   local crowded=0

@@ -1,0 +1,29 @@
+ox_help="\
+usage: ox [FLAG [FLAG ... ]] [OPTION ARGUMENT [OPTION ARGUMENT ... ]]
+          [-u] [-c]
+          [-c] [-o] [-X SYMBOL] [-O SYMBOL] [--quiet]
+          [--help]
+
+A simple, bash-driven noughts and crosses game for your console.
+
+Flags:
+-q, --quiet   does not display game logs
+-h, --help    prints this help message and exits
+
+Flags (game preferences):
+-u            user starts the game (DEFAULT)
+-c            cpu starts the game
+-x            user plays crosses (DEFAULT)
+-o            user plays noughts
+
+Options (display preferences):
+-X SYMBOL     changes default symbol 'X' for crosses by SYMBOL
+-O SYMBOL     changes default symbol 'O' for noughts by SYMBOL
+
+SYMBOL can be any character supported by your terminal emulator.
+Colors are used to distinguish user's (red) and cpu's (blue) symbols.\
+"
+
+function print_help {
+  echo -e "$ox_help"
+}
