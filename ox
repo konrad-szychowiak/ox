@@ -8,8 +8,12 @@ LOG="" #"\e[35m"
 
 # preset
 XOBOARD=(0 1 2 3 4 5 6 7 8)
-
-. locales/en_GB.locale
+[[ ! $ox_locale ]] && ox_locale=${LANG%%.*}
+until [[ -f ./locales/$ox_locale.locale ]]; do
+  printf "choose language (e.g. en_GB): "
+  read ox_locale
+done
+. locales/$ox_locale.locale
 
 function check_if_solved {
   local crowded=0
