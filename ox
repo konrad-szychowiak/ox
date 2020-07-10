@@ -4,16 +4,27 @@ B="\e[1m"
 RED="\e[31m"
 BLUE="\e[34m"
 NULL="\e[0m"
-LOG="" #"\e[35m"
+LOG="" # "\e[35m"
 
 # preset
 XOBOARD=(0 1 2 3 4 5 6 7 8)
+
 [[ ! $ox_locale ]] && ox_locale=${LANG%%.*}
 until [[ -f ./locales/$ox_locale.locale ]]; do
-  printf "choose language (e.g. en_GB): "
+  printf $B"choose language [en_GB/pl_PL/... ? list all possible choices]: "$NULL
   read ox_locale
+
+  if [[ $ox_locale == ? ]]; then
+    echo installed locales:
+    for lang in $(ls ./locales)
+    do
+      echo -e "  + "${lang%%.locale*}
+    done
+  fi
 done
+
 . locales/$ox_locale.locale
+
 
 function check_if_solved {
   local crowded=0

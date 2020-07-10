@@ -1,3 +1,5 @@
+ox_log_game=game
+
 ox_help="\
 usage: ox [FLAG [FLAG ... ]] [OPTION ARGUMENT [OPTION ARGUMENT ... ]]
           [-u] [-c]
@@ -26,4 +28,8 @@ Colors are used to distinguish user's (red) and cpu's (blue) symbols.\
 
 function print_help {
   echo -e "$ox_help"
+}
+
+function winner {
+  printf "$LOG[%6s]$NULL $1 wins the game!\n" $ox_log_game
 }

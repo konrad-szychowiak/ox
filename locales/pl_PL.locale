@@ -1,3 +1,5 @@
+ox_log_game=game
+
 function print_help {
   # DEPRECATED: use variables to store messages
   # TODO: update as above
@@ -14,4 +16,8 @@ function print_help {
   echo -e "\nOpcje z argumentami:"
   echo -e "-X ZNAK\t\tzastępuje domyslny znak krzyżyka (X) przez ZNAK"
   echo -e "-O ZNAK\t\tzastępuje domyslny znak kółka (O) przez ZNAK"
+}
+
+function winner {
+  printf "$LOG[%6s]$NULL $1 wygrywa grę!\n" $ox_log_game
 }
