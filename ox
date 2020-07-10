@@ -8,6 +8,8 @@ LOG="" # "\e[35m"
 
 # preset
 XOBOARD=(0 1 2 3 4 5 6 7 8)
+symbolX=$RED"X"$NULL
+symbolO=$BLUE"O"$NULL
 
 [[ ! $ox_locale ]] && ox_locale=${LANG%%.*}
 until [[ -f ./locales/$ox_locale.locale ]]; do
