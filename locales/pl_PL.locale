@@ -1,5 +1,21 @@
 ox_log_game=game
 
+function locale_tie {
+  printf "$LOG[%6s]$NULL Gra zakończona... Remis.\n" $ox_log_game
+}
+
+locale_prompt () {
+  printf "Zagraj $1 na pole: "
+}
+
+locale_endturn_player () {
+  printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" player
+}
+
+locale_endturn_cpu () {
+  printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolO zagrano na $where...\n" cpu
+}
+
 function print_help {
   # DEPRECATED: use variables to store messages
   # TODO: update as above

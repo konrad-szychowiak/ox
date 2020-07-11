@@ -31,5 +31,21 @@ function print_help {
 }
 
 function winner {
-  printf "$LOG[%6s]$NULL $1 wins the game!\n" $ox_log_game
+  printf "$LOG[%6s]$NULL Game over... $1 wins the game!\n" $ox_log_game
+}
+
+function locale_tie {
+  printf "$LOG[%6s]$NULL Game over... It's a draw.\n" $ox_log_game
+}
+
+locale_prompt () {
+  printf "Play $1 [field No]: "
+}
+
+locale_endturn_player () {
+  printf "$LOG[%6s]$NULL Round finished... $symbolX played to $where...\n" player
+}
+
+locale_endturn_cpu () {
+  printf "$LOG[%6s]$NULL Round finished... $symbolO played to $where...\n" cpu
 }

@@ -33,7 +33,6 @@ function check_if_solved {
 
   for i in ${!XOBOARD[*]}; do [[ $i = ${XOBOARD[$i]} ]] && crowded=$(( crowded + 1 )); done
 
-
   if [ ${XOBOARD[0]} = ${XOBOARD[1]} -a ${XOBOARD[1]} = ${XOBOARD[2]} ]
   then
     winner ${XOBOARD[0]}
@@ -84,7 +83,7 @@ function check_if_solved {
 
   if [[ $crowded == 0 ]]
   then
-    [[ $quite != true ]] && printf "$LOG[%6s]$NULL Gra zakończona... Remis.\n" game
+    [[ $quite != true ]] && locale_tie
     return 0
   fi
 
@@ -94,11 +93,10 @@ function check_if_solved {
 function put_user_symbol {
   local where=-1
   until [[ 0 -le $where ]] 2>/dev/null && [[ 9 -ge $where ]] 2>/dev/null && [[ ${XOBOARD[$where]} == $where ]] 2>/dev/null; do
-    [[ $quite != true ]] && printf "Zagraj $symbolX na polę: "
-    read where
+    [[ $quite != true ]] && locale_prompt $symbolX && read where
   done
 
-  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" player
+  [[ $quite != true ]] && locale_endturn_player
   XOBOARD[$where]=$symbolX
 }
 
@@ -107,7 +105,7 @@ function put_enemy_symbol {
   until [[ ${XOBOARD[$where]} == $where ]]; do
     where=$(( $RANDOM % 9 ))
   done
-  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolO zagrano na $where...\n" cpu
+  [[ $quite != true ]] && locale_endturn_cpu
   XOBOARD[$where]=$symbolO
 
   check_if_solved
@@ -196,11 +194,11 @@ while getopts ":hucxoq :X: :O:" opt; do
       # echo -e $BLUE"Symbol for [O] has been overwritten by the user. Now using [$symbolO]."$NULL
       ;;
     \? )
-      echo "Invalid Option: -$OPTARG" 1>&2
+      printf "$RED[%6s]${NULL}Invalid Option: -$OPTARG" error 1>&2
       exit 1
       ;;
     : )
-      echo "Invalid Option: -$OPTARG requires an argument" 1>&2
+      printf "$RED[%6s]${NULL}Invalid Option: -$OPTARG requires an argument" error 1>&2
       exit 1
       ;;
   esac
