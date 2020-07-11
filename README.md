@@ -2,8 +2,6 @@
 
 `ox` is a simple, bash-driven, console :o: noughts and crosses :x: :video_game: game.
 
-> Currently available only in polish [`pl_PL`].
-
 ## Installation
 
 Enable executing the file.
@@ -45,23 +43,28 @@ ox -h
 which ox # should return the path to the directory you've chosen
 ```
 
-### Options !!!DEPRECATED
+### Flags
 
-```
-Składnia: xo [OPCJA [ARGUMENT] …]
-Prosta gra w kółko i krzyżyk z komputerem.
-Komputer gra losowo, więc gracz ma większe szanse na wygraną.
--h, --help	wyświetla tę pomoc i kończy działanie skryptu
--q, --quiet	nie pokazuje logów
--u		użytkownik zaczyna grę (DOMYŚLNE)
--c		komputer zaczyna grę
--x		gracz gra krzyżykiem (DOMYŚLNE)
--o		gracz gra kółkiem
+| short | long      |                                    |
+| ----- | --------- | ---------------------------------- |
+| `-q`  | `--quiet` | does not print game logs           |
+| `-h`  | `--help`  | prints this help message and exits |
+| `-u`  | _n/a_     | **u**ser starts the game (DEFAULT) |
+| `-c`  | _n/a_     | **c**pu starts the game            |
+| `-x`  | _n/a_     | user plays crosses (DEFAULT)       |
+| `-o`  | _n/a_     | user plays noughts                 |
 
-Opcje z argumentami:
--X ZNAK		zastępuje domyslny znak krzyżyka (X) przez ZNAK
--O ZNAK		zastępuje domyslny znak kółka (O) przez ZNAK
-```
+### Options
+
+Options take arguments to tweak how your session will work.
+
+| option      |                                                  |
+| ----------- | ------------------------------------------------ |
+| `-X SYMBOL` | changes default symbol 'X' for crosses by SYMBOL |
+| `-O SYMBOL` | changes default symbol 'O' for noughts by SYMBOL |
+
+> `SYMBOL` can be any character supported by your terminal emulator.
+> Colors are used to distinguish user's (red) and cpu's (blue) symbols.
 
 ## Contributing
 

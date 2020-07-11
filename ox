@@ -4,40 +4,34 @@ B="\e[1m"
 RED="\e[31m"
 BLUE="\e[34m"
 NULL="\e[0m"
-LOG="" #"\e[35m"
+LOG="" # "\e[35m"
 
 # preset
 XOBOARD=(0 1 2 3 4 5 6 7 8)
-
 symbolX=$RED"X"$NULL
 symbolO=$BLUE"O"$NULL
-quiet=false
 
-function print_help {
-  echo -e "Składnia: ${0##*/} [OPCJA [ARGUMENT] …]"
-  echo -e "Prosta gra w kółko i krzyżyk z komputerem. \nKomputer gra losowo, więc gracz ma większe szanse na wygraną.\n"
+[[ ! $ox_locale ]] && ox_locale=${LANG%%.*}
+until [[ -f ./locales/$ox_locale.locale ]]; do
+  printf $B"choose language [en_GB/pl_PL/... ? list all possible choices]: "$NULL
+  read ox_locale
 
-  echo -e "-h, --help\twyświetla tę pomoc i kończy działanie skryptu"
-  echo -e "-q, --quiet\tnie pokazuje logów"
-  echo -e "$B-u$NULL\t\tużytkownik zaczyna grę (DOMYŚLNE)"
-  echo -e "-c\t\tkomputer zaczyna grę"
-  echo -e "$B-x$NULL\t\tgracz gra krzyżykiem (DOMYŚLNE)"
-  echo -e "-o\t\tgracz gra kółkiem"
+  if [[ $ox_locale == ? ]]; then
+    echo installed locales:
+    for lang in $(ls ./locales)
+    do
+      echo -e "  + "${lang%%.locale*}
+    done
+  fi
+done
 
-  echo -e "\nOpcje z argumentami:"
-  echo -e "-X ZNAK\t\tzastępuje domyslny znak krzyżyka (X) przez ZNAK"
-  echo -e "-O ZNAK\t\tzastępuje domyslny znak kółka (O) przez ZNAK"
-}
+. locales/$ox_locale.locale
 
-function winner {
-  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Gra zakończona... $1 wygrywa grę.\n" game
-}
 
 function check_if_solved {
   local crowded=0
 
   for i in ${!XOBOARD[*]}; do [[ $i = ${XOBOARD[$i]} ]] && crowded=$(( crowded + 1 )); done
-
 
   if [ ${XOBOARD[0]} = ${XOBOARD[1]} -a ${XOBOARD[1]} = ${XOBOARD[2]} ]
   then
@@ -89,7 +83,7 @@ function check_if_solved {
 
   if [[ $crowded == 0 ]]
   then
-    [[ $quite != true ]] && printf "$LOG[%6s]$NULL Gra zakończona... Remis.\n" game
+    [[ $quite != true ]] && locale_tie
     return 0
   fi
 
@@ -99,11 +93,10 @@ function check_if_solved {
 function put_user_symbol {
   local where=-1
   until [[ 0 -le $where ]] 2>/dev/null && [[ 9 -ge $where ]] 2>/dev/null && [[ ${XOBOARD[$where]} == $where ]] 2>/dev/null; do
-    [[ $quite != true ]] && printf "Zagraj $symbolX na polę: "
-    read where
+    [[ $quite != true ]] && locale_prompt $symbolX && read where
   done
 
-  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolX zagrano na $where...\n" player
+  [[ $quite != true ]] && locale_endturn_player
   XOBOARD[$where]=$symbolX
 }
 
@@ -112,7 +105,7 @@ function put_enemy_symbol {
   until [[ ${XOBOARD[$where]} == $where ]]; do
     where=$(( $RANDOM % 9 ))
   done
-  [[ $quite != true ]] && printf "$LOG[%6s]$NULL Tura gracza zakończona... $symbolO zagrano na $where...\n" cpu
+  [[ $quite != true ]] && locale_endturn_cpu
   XOBOARD[$where]=$symbolO
 
   check_if_solved
@@ -201,11 +194,11 @@ while getopts ":hucxoq :X: :O:" opt; do
       # echo -e $BLUE"Symbol for [O] has been overwritten by the user. Now using [$symbolO]."$NULL
       ;;
     \? )
-      echo "Invalid Option: -$OPTARG" 1>&2
+      printf "$RED[%6s]${NULL}Invalid Option: -$OPTARG" error 1>&2
       exit 1
       ;;
     : )
-      echo "Invalid Option: -$OPTARG requires an argument" 1>&2
+      printf "$RED[%6s]${NULL}Invalid Option: -$OPTARG requires an argument" error 1>&2
       exit 1
       ;;
   esac

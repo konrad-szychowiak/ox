@@ -1,0 +1,51 @@
+ox_log_game=game
+
+ox_help="\
+usage: ox [FLAG [FLAG ... ]] [OPTION ARGUMENT [OPTION ARGUMENT ... ]]
+          [-u] [-c]
+          [-c] [-o] [-X SYMBOL] [-O SYMBOL] [--quiet]
+          [--help]
+
+A simple, bash-driven noughts and crosses game for your console.
+
+Flags:
+-q, --quiet   does not display game logs
+-h, --help    prints this help message and exits
+
+Flags (game preferences):
+-u            user starts the game (DEFAULT)
+-c            cpu starts the game
+-x            user plays crosses (DEFAULT)
+-o            user plays noughts
+
+Options (display preferences):
+-X SYMBOL     changes default symbol 'X' for crosses by SYMBOL
+-O SYMBOL     changes default symbol 'O' for noughts by SYMBOL
+
+SYMBOL can be any character supported by your terminal emulator.
+Colors are used to distinguish user's (red) and cpu's (blue) symbols.\
+"
+
+function print_help {
+  echo -e "$ox_help"
+}
+
+function winner {
+  printf "$LOG[%6s]$NULL Game over... $1 wins the game!\n" $ox_log_game
+}
+
+function locale_tie {
+  printf "$LOG[%6s]$NULL Game over... It's a draw.\n" $ox_log_game
+}
+
+locale_prompt () {
+  printf "Play $1 [field No]: "
+}
+
+locale_endturn_player () {
+  printf "$LOG[%6s]$NULL Round finished... $symbolX played to $where...\n" player
+}
+
+locale_endturn_cpu () {
+  printf "$LOG[%6s]$NULL Round finished... $symbolO played to $where...\n" cpu
+}
